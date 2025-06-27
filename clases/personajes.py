@@ -51,11 +51,11 @@ class PersonajeJugable(Personaje):
             case "caballero":
             
                 self.habilidades = {
-                    "nivel_1" : {
+                    (self.nivel == 1) : {
                         "[ataque]" : {
                             "[corte rapido]" : lambda objetivo : self.atacar(1,0,False,objetivo),
-                            "[corte medio]" : lambda objetivo : self.atacar(1,0,False,objetivo),
-                            "[estocada final]" : lambda objetivo : self.atacar(1,0,False,objetivo)
+                            "[corte medio]" : lambda objetivo : self.atacar(1.5,15,False,objetivo),
+                            "[estocada final]" : lambda objetivo : self.atacar(2,25,False,objetivo)
                         },
                         "[defensa]" : {
                             "[propia]" : None,
@@ -63,8 +63,30 @@ class PersonajeJugable(Personaje):
                             "[a todo el grupo]" : None
                         }
                         },
-                    "nivel_2" : {},
-                    "nivel_3" : {}
+                    (self.nivel == 2) : {
+                        "[ataque]" : {
+                            "[corte rapido]" : lambda objetivo : self.atacar(2,0,False,objetivo),
+                            "[corte medio]" : lambda objetivo : self.atacar(2.5,15,False,objetivo),
+                            "[estocada final]" : lambda objetivo : self.atacar(3,25,False,objetivo)
+                        },
+                        "[defensa]" : {
+                            "[propia]" : None,
+                            "[a un compañero]" : None,
+                            "[a todo el grupo]" : None
+                        }
+                        },
+                    (self.nivel == 3) : {
+                        "[ataque]" : {
+                            "[corte rapido]" : lambda objetivo : self.atacar(3,0,False,objetivo),
+                            "[corte medio]" : lambda objetivo : self.atacar(3.5,15,False,objetivo),
+                            "[estocada final]" : lambda objetivo : self.atacar(4.5,25,False,objetivo)
+                        },
+                        "[defensa]" : {
+                            "[propia]" : None,
+                            "[a un compañero]" : None,
+                            "[a todo el grupo]" : None
+                        }
+                    }
                 }
                 
             case "mago":
@@ -104,7 +126,32 @@ class PersonajeJugable(Personaje):
                     "nivel_2" : {},
                     "nivel_3" : {}
                 }
-    
+
+    def menu_batalla (self):
+        
+        def opciones_ataque(enemigo = None):
+            ataque_1 = lambda enemigo : self.habilidades[True]["[ataque]"]["[corte rapido]"](enemigo)
+            ataque_1(enemigo)
+        def opciones_habilidad():
+            ...
+        
+        print(
+            f"""
+            {self.nombre} deberia?
+            [⚔️][atacar]
+            [💫][otro]
+            """
+            )
+        pregunta = input(">>> ")
+        
+        if pregunta == "atacar":
+            opciones_ataque(enemigo = troll)
+        elif pregunta == "otro":
+            ...
+        else:
+            #volver a preguntar
+            ...
+  
 class Enemigo(Personaje):
     def __init__(self, nombre:str,salud:int,ataque:int,especial:int,nivel:int,habilidades:dict,descripcion:str):
         super().__init__(nombre, descripcion)
@@ -114,3 +161,11 @@ class Enemigo(Personaje):
         self.nivel = nivel
         self.habilidades = habilidades
 
+
+troll = Enemigo("Troll",100,None,None,None,None,None)
+
+caballero = PersonajeJugable("Felipe",100,"caballero",10,5,100,None,0,1)
+
+caballero.menu_batalla()
+
+print(troll.salud)
