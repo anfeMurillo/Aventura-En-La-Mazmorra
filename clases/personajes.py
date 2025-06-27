@@ -27,9 +27,20 @@ class PersonajeJugable(Personaje):
                     objetivo.salud -= (daño)
                     objetivo.salud = int(objetivo.salud)
             else:
-                daño = self.ataque * valor_ataque
-                objetivos[0].salud -= (daño)
-                objetivos[0].salud = int(objetivos[0].salud)
+                if len(objetivos) == 1 :
+                    daño = self.ataque * valor_ataque
+                    objetivos[0].salud -= (daño)
+                    objetivos[0].salud = int(objetivos[0].salud)
+                else:
+                    print(
+                        f"""
+                        A cual enemigo atacar?
+                        """)
+                    for objetivo in objetivos:
+                        i = 1
+                        print(f"[{i}][{objetivo.nombre}]")
+                        i += 1
+                    respuesta = input(">>> ")
     
     def definir_habilidades(self):
         
@@ -68,10 +79,10 @@ class PersonajeJugable(Personaje):
                                 "funcion": lambda objetivo : self.atacar(2,25,True,*objetivo)
                             }
                         },
-                        "[defensa]" : {
-                            "[propia]" : None,
-                            "[a un compañero]" : None,
-                            "[a todo el grupo]" : None
+                        "[habilidad]" : {
+                            "[protegerse]" : None,
+                            "[proteger a un compañero]" : None,
+                            "[proteger a todo el grupo]" : None
                         }
                         },
                     (self.nivel == 2) : {
@@ -91,7 +102,7 @@ class PersonajeJugable(Personaje):
                             "[balas de piedra]" : None,
                             "[tormeta electrica]" : None
                         },
-                        "[recuperacion]" : {
+                        "[habilidad]" : {
                             "[propia]" : None,
                             "[a un compañero]" : None,
                             "[a todo el grupo]" : None
@@ -151,9 +162,10 @@ class PersonajeJugable(Personaje):
                 f"""
                 [⚔️][atacar]
                 
-                [1][corte rapido]
-                [2][corte medio]
-                [3][estocada final]
+                [1][{self.habilidades[True]["[ataque]"][1]["nombre"]}]
+                [2][{self.habilidades[True]["[ataque]"][2]["nombre"]}]
+                [3][{self.habilidades[True]["[ataque]"][3]["nombre"]}]
+                [4][volver atras]
                 
                 """)
             
@@ -167,6 +179,8 @@ class PersonajeJugable(Personaje):
                     ataque_2(troll,troll_2)
                 case "3" :
                     ataque_3(troll,troll_2)
+                case "4" :
+                    self.menu_batalla()
                 
         def opciones_habilidad():
             ...
