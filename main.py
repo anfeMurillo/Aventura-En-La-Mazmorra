@@ -24,7 +24,13 @@ if __name__ == "__main__":
         
         time.sleep(2)
         
-        print("Quieres empezar? [si] [no]")
+        print(
+            """
+            🏰 Quieres empezar? 🧌 
+            [si]
+            [no]
+            """
+            )
         
         respuesta = input(">>> ")
         
@@ -66,3 +72,40 @@ if __name__ == "__main__":
         Ladagua te ha elegido. La mazmorra respira. Y tu historia… acaba de comenzar."""
         
     dialogo(introduccion)
+    
+    from clases import personajes as p
+    
+    time.sleep(2)
+    
+    print(
+        """
+        🤔 Cual es tu nombre de leyenda ?
+        """
+        )
+    
+    jugador_name = input(">>> ")
+    
+    time.sleep(2)
+    
+    print(
+        """
+        Cual es tu rol?
+        
+        ⚔️ [caballero]
+        
+        🧙 [mago]
+        
+        🥷 [ladron]
+        """)
+    
+    jugador_rol = input(">>> ")
+    
+    time.sleep(2)
+    
+    print(
+        """
+        Se va a crear tu personaje 😃
+        """
+        )
+    
+    jugador_principal = p.PersonajeJugable(jugador_name,100,jugador_rol,5,5,5,None,0,1,None)
