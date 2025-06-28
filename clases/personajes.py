@@ -1,3 +1,5 @@
+import time as t
+
 class Personaje :
     def __init__(self,nombre:str,descripcion:str):
         self.nombre = nombre
@@ -6,21 +8,22 @@ class Personaje :
 
 class PersonajeJugable(Personaje):
     
-    def __init__(self,nombre:str,salud:int,rol:str,ataque:int,especial:int,magia:int,descripcion:str,experiencia:int,nivel:int):
+    def __init__(self,nombre:str,salud:int,rol:str,ataque:int,especial:int,magia:int,descripcion:str,vivo:bool):
         super().__init__(nombre,descripcion)
         self.salud = int(salud)
         self.rol = rol
         self.ataque = ataque
         self.especial = especial
         self.magia = magia
-        self.experiencia = experiencia
-        self.nivel = nivel
+        self.experiencia = 0
+        self.nivel = 1
+        self.vivo = vivo
         self.habilidades = {}
         self.definir_habilidades()
 
     def atacar(self,valor_ataque:int,costo_magia:int,grupal:bool,*objetivos:object):
         if self.magia >= costo_magia:
-            if grupal == True:
+            if grupal:
                 daño = self.ataque * valor_ataque
                 self.magia -= costo_magia
                 for objetivo in objetivos:
@@ -36,14 +39,81 @@ class PersonajeJugable(Personaje):
                         f"""
                         A cual enemigo atacar?
                         """)
+                    i = 1
                     for objetivo in objetivos:
-                        i = 1
-                        print(f"[{i}][{objetivo.nombre}]")
-                        i = i + 1
+                        print(f"[{(i)}][{objetivo.nombre}]")
+                        i += 1
+                        
                     respuesta = int(input(">>> "))
                     daño = self.ataque * valor_ataque
                     objetivos[(respuesta-1)].salud -= daño
                     objetivos[(respuesta-1)].salud = int(objetivos[(respuesta-1)].salud)
+        else:
+            print("\n No tienes suficiente magia para esto.")
+            t.sleep(2)
+            self.menu_batalla()
+
+    def proteger(self,valor_proteccion:int,costo_magia:int,grupal:bool,*aliados:object):
+        
+        if self.magia >= costo_magia:
+            
+            if grupal:
+                
+                if len(aliados) > 1:
+                        
+                    for aliado in aliados:
+                        aliado.salud += valor_proteccion
+                    
+                    t.sleep(1.5)
+                    
+                    print(
+                        f"""
+                        🛡️ El aliado {aliado.nombre} ha recibido +{valor_proteccion} de proteccion 🛡️
+                        """)
+                    
+                    t.sleep(1.5)
+                
+                else:
+                    
+                    print(
+                        f"""
+                        A cual aliado proteger?
+                        """)
+                    i = 1
+                    for aliado in aliados:
+                        print(f"[{(i)}][{aliado.nombre}]")
+                        i += 1
+                    
+                    respuesta = int(input(">>> "))
+                    
+                    aliados[respuesta-1].salud += valor_proteccion
+                    
+                    t.sleep(1.5)
+                    
+                    print(
+                        f"""
+                        
+                        🛡️ {aliados[respuesta-1].nombre} ha recibido + {valor_proteccion} de proteccion 🛡️
+                        
+                        """)
+                    
+                    t.sleep(1.5)
+                
+            else:
+                self.salud += valor_proteccion
+                
+                t.sleep(1.5)
+                
+                print(
+                    f"""
+                    🛡️ {self.nombre} ha recibido + {valor_proteccion} de proteccion 🛡️
+                     """)
+                
+                t.sleep(1.5)
+        else:
+            print("\n No tienes suficiente magia para esto.")
+            t.sleep(2)
+            self.menu_batalla()
     
     def definir_habilidades(self):
         
@@ -71,28 +141,91 @@ class PersonajeJugable(Personaje):
                         "[ataque]" : {
                             1 : {
                                 "nombre" : "[corte rapido]",
-                                "funcion": lambda objetivo : self.atacar(1,0,False,*objetivo)
+                                "funcion": lambda args : self.atacar(1,0,False,*args)
                                 },
                             2 : {
                                 "nombre" : "[corte medio]",
-                                "funcion": lambda objetivo : self.atacar(1.5,15,False,*objetivo)
+                                "funcion": lambda args : self.atacar(1.5,15,False,*args)
                             },
                             3 : {
                                 "nombre" : "[estocada final]",
-                                "funcion": lambda objetivo : self.atacar(2,25,True,*objetivo)
+                                "funcion": lambda args : self.atacar(2,25,True,*args)
                             }
                         },
                         "[habilidad]" : {
-                            "[protegerse]" : None,
-                            "[proteger a un compañero]" : None,
-                            "[proteger a todo el grupo]" : None
+                            1 : {
+                                "nombre" : "[protegerse]",
+                                "funcion": lambda arg : self.proteger(15,5,False)
+                                },
+                            2 : {
+                                "nombre" : "[proteger a un compañero]",
+                                "funcion": lambda arg : self.proteger(15,10,True,*arg)
+                            },
+                            3 : {
+                                "nombre" : "[proteger a todo el grupo]",
+                                "funcion": lambda arg : self.proteger(10,15,True,*arg)
+                            }
                         }
                         },
                     (self.nivel == 2) : {
-                        ...
+                        "[ataque]" : {
+                            1 : {
+                                "nombre" : "[corte rapido II]",
+                                "funcion": lambda args : self.atacar(1,0,False,*args)
+                                },
+                            2 : {
+                                "nombre" : "[corte medio II]",
+                                "funcion": lambda args : self.atacar(1.5,15,False,*args)
+                            },
+                            3 : {
+                                "nombre" : "[estocada final II]",
+                                "funcion": lambda args : self.atacar(2,25,True,*args)
+                            }
+                        },
+                        "[habilidad]" : {
+                            1 : {
+                                "nombre" : "[protegerse II]",
+                                "funcion": lambda arg : self.proteger(25,5,False)
+                                },
+                            2 : {
+                                "nombre" : "[proteger a un compañero II]",
+                                "funcion": lambda arg : self.proteger(35,10,True,arg)
+                            },
+                            3 : {
+                                "nombre" : "[proteger a todo el grupo II]",
+                                "funcion": lambda arg : self.proteger(20,15,True,*arg)
+                            }
+                        }
                         },
                     (self.nivel == 3) : {
-                        ...
+                        "[ataque]" : {
+                            1 : {
+                                "nombre" : "[corte sombrio]",
+                                "funcion": lambda args : self.atacar(1,0,False,*args)
+                                },
+                            2 : {
+                                "nombre" : "[espiral de acero]",
+                                "funcion": lambda args : self.atacar(1.5,15,False,*args)
+                            },
+                            3 : {
+                                "nombre" : "[estocada final III]",
+                                "funcion": lambda args : self.atacar(2,25,True,*args)
+                            }
+                        },
+                        "[habilidad]" : {
+                            1 : {
+                                "nombre" : "[protegerse III]",
+                                "funcion": lambda arg : self.proteger(25,5,False)
+                                },
+                            2 : {
+                                "nombre" : "[proteger a un compañero III]",
+                                "funcion": lambda arg : self.proteger(40,10,True,arg)
+                            },
+                            3 : {
+                                "nombre" : "[proteger a todo el grupo III]",
+                                "funcion": lambda arg : self.proteger(30,15,True,*arg)
+                            }
+                        }
                     }
                 }
                 
@@ -136,27 +269,6 @@ class PersonajeJugable(Personaje):
 
     def menu_batalla (self):
         
-        print(
-            f"""
-            
-            ____________________________________________________________
-            
-            {self.nombre}
-            
-            [{self.salud}][{(self.salud // 10) * "💖" }]
-            
-            [{self.magia}][{(self.magia // 10) * "🧿" }]
-            
-            ____________________________________________________________
-            
-            Opciones
-            
-            [⚔️][atacar]
-            
-            [💫][otro]
-            
-            """)
-        
         def opciones_ataque():
             ataque_1 = lambda *args : self.habilidades[True]["[ataque]"][1]["funcion"](args)
             ataque_2 = lambda *args : self.habilidades[True]["[ataque]"][2]["funcion"](args)
@@ -186,17 +298,73 @@ class PersonajeJugable(Personaje):
                     self.menu_batalla()
                 
         def opciones_habilidad():
-            ...
+            
+            habilidad_1 = lambda *args : self.habilidades[True]["[habilidad]"][1]["funcion"](args)
+            habilidad_2 = lambda *args : self.habilidades[True]["[habilidad]"][2]["funcion"](args)
+            habilidad_3 = lambda *args : self.habilidades[True]["[habilidad]"][3]["funcion"](args)
+            print(
+                f"""
+                [💫][habilidad]
+                
+                [1][{self.habilidades[True]["[habilidad]"][1]["nombre"]}]
+                [2][{self.habilidades[True]["[habilidad]"][2]["nombre"]}]
+                [3][{self.habilidades[True]["[habilidad]"][3]["nombre"]}]
+                [4][volver atras]
+                
+                """)
+            
+            respuesta = input(">>> ")
+            
+            match respuesta:
+                
+                case "1" :
+                    habilidad_1(caballero_2)
+                case "2" :
+                    habilidad_2(caballero_2)
+                case "3" :
+                    habilidad_3(caballero_2)
+                case "4" :
+                    self.menu_batalla()
+        
+        print(
+            f"""
+            
+            ____________________________________________________________
+            
+            {self.nombre}
+            
+            [{self.salud}][{(self.salud // 10) * "💖" }]
+            
+            [{self.magia}][{(self.magia // 10) * "🧿" }]
+            
+            ____________________________________________________________
+            
+            Opciones
+            
+            [⚔️][1][atacar]
+            
+            [💫][2][habilidad]
+            
+            """)
         
         pregunta = input(">>> ")
         
-        if pregunta == "atacar":
+        if pregunta == "1":
+            t.sleep(2)
             opciones_ataque()
-        elif pregunta == "otro":
-            ...
+        elif pregunta == "2":
+            t.sleep(2)
+            opciones_habilidad()
         else:
             #volver a preguntar
-            ...
+            
+            t.sleep(2)
+            
+            print("\n ⚠️ Valor no permitido, vuelve a intentar")
+            
+            t.sleep(2)
+            
+            self.menu_batalla()
   
 class Enemigo(Personaje):
     
@@ -218,7 +386,6 @@ class Enemigo(Personaje):
             [👹][{self.nivel}]
             
             """)
-
 
 troll = Enemigo(
     nombre= "Troll",
@@ -242,10 +409,36 @@ troll.datos()
 
 troll_2.datos()
 
-caballero = PersonajeJugable("Felipe",100,"caballero",10,5,100,None,0,1)
+caballero = PersonajeJugable(
+                             nombre="Felipe",
+                             salud= 100,
+                             rol= "caballero",
+                             ataque= 10,
+                             especial= 15,
+                             magia= 50,
+                             descripcion="Caballero y ya",
+                             vivo= True
+                             )
+
+caballero_2 = PersonajeJugable(
+                             nombre="Stiven",
+                             salud= 100,
+                             rol= "caballero",
+                             ataque= 10,
+                             especial= 15,
+                             magia= 50,
+                             descripcion="otro caballero",
+                             vivo= True
+                             )
 
 caballero.menu_batalla()
+
+caballero_2.menu_batalla()
 
 troll.datos()
 
 troll_2.datos()
+
+print(caballero.nombre," ",caballero.salud)
+
+print(caballero_2.nombre," ",caballero_2.salud)

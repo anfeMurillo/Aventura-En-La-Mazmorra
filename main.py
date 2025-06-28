@@ -108,4 +108,4 @@ if __name__ == "__main__":
         """
         )
     
-    jugador_principal = p.PersonajeJugable(jugador_name,100,jugador_rol,5,5,5,None,0,1,None)
+    jugador_principal = p.PersonajeJugable(jugador_name,100,jugador_rol,10,10,50,"descripcion",True)
