@@ -1,5 +1,7 @@
 import time as t
 
+from main import heroes
+
 class Personaje :
     def __init__(self,nombre:str,descripcion:str):
         self.nombre = nombre
@@ -21,19 +23,19 @@ class PersonajeJugable(Personaje):
         self.habilidades = {}
         self.definir_habilidades()
 
-    def atacar(self,valor_ataque:int,costo_magia:int,grupal:bool,*objetivos:object):
+    def atacar(self,valor_ataque:int,costo_magia:int,grupal:bool,**objetivos:object):
         if self.magia >= costo_magia:
             if grupal:
                 daño = self.ataque * valor_ataque
                 self.magia -= costo_magia
                 for objetivo in objetivos:
-                    objetivo.salud -= daño
-                    objetivo.salud = int(objetivo.salud)
+                    objetivos[objetivo].salud -= daño
+                    objetivos[objetivo].salud = int(objetivos[objetivo].salud)
             else:
                 if len(objetivos) == 1 :
                     daño = self.ataque * valor_ataque
-                    objetivos[0].salud -= daño
-                    objetivos[0].salud = int(objetivos[0].salud)
+                    objetivos[str(1)].salud -= daño
+                    objetivos[str(1)].salud = int(objetivos[str(1)].salud)
                 else:
                     print(
                         f"""
@@ -41,13 +43,13 @@ class PersonajeJugable(Personaje):
                         """)
                     i = 1
                     for objetivo in objetivos:
-                        print(f"[{(i)}][{objetivo.nombre}]")
+                        print(f"[{(i)}][{objetivos[objetivo].nombre}]")
                         i += 1
                         
                     respuesta = int(input(">>> "))
                     daño = self.ataque * valor_ataque
-                    objetivos[(respuesta-1)].salud -= daño
-                    objetivos[(respuesta-1)].salud = int(objetivos[(respuesta-1)].salud)
+                    objetivos[str(respuesta)].salud -= daño
+                    objetivos[str(respuesta)].salud = int(objetivos[str(respuesta)].salud)
         else:
             print("\n No tienes suficiente magia para esto.")
             t.sleep(2)
@@ -141,15 +143,15 @@ class PersonajeJugable(Personaje):
                         "[ataque]" : {
                             1 : {
                                 "nombre" : "[corte rapido]",
-                                "funcion": lambda args : self.atacar(1,0,False,*args)
+                                "funcion": lambda **args : self.atacar(1,0,False,**args)
                                 },
                             2 : {
                                 "nombre" : "[corte medio]",
-                                "funcion": lambda args : self.atacar(1.5,15,False,*args)
+                                "funcion": lambda **args : self.atacar(1.5,15,False,**args)
                             },
                             3 : {
                                 "nombre" : "[estocada final]",
-                                "funcion": lambda args : self.atacar(2,25,True,*args)
+                                "funcion": lambda **args : self.atacar(2,25,True,**args)
                             }
                         },
                         "[habilidad]" : {
@@ -270,9 +272,10 @@ class PersonajeJugable(Personaje):
     def menu_batalla (self):
         
         def opciones_ataque():
-            ataque_1 = lambda *args : self.habilidades[True]["[ataque]"][1]["funcion"](args)
-            ataque_2 = lambda *args : self.habilidades[True]["[ataque]"][2]["funcion"](args)
-            ataque_3 = lambda *args : self.habilidades[True]["[ataque]"][3]["funcion"](args)
+            from .combate import enemigos_turno
+            ataque_1 = lambda **args : self.habilidades[True]["[ataque]"][1]["funcion"](**args)
+            ataque_2 = lambda **args : self.habilidades[True]["[ataque]"][2]["funcion"](**args)
+            ataque_3 = lambda **args : self.habilidades[True]["[ataque]"][3]["funcion"](**args)
             print(
                 f"""
                 [⚔️][atacar]
@@ -289,11 +292,11 @@ class PersonajeJugable(Personaje):
             match respuesta:
                 
                 case "1" :
-                    ataque_1()
+                    ataque_1(**enemigos_turno)
                 case "2" :
-                    ataque_2()
+                    ataque_2(**enemigos_turno)
                 case "3" :
-                    ataque_3()
+                    ataque_3(**enemigos_turno)
                 case "4" :
                     self.menu_batalla()
                 
@@ -318,11 +321,11 @@ class PersonajeJugable(Personaje):
             match respuesta:
                 
                 case "1" :
-                    habilidad_1()
+                    habilidad_1(heroes)
                 case "2" :
-                    habilidad_2()
+                    habilidad_2(heroes)
                 case "3" :
-                    habilidad_3()
+                    habilidad_3(heroes)
                 case "4" :
                     self.menu_batalla()
         
@@ -377,7 +380,7 @@ class Enemigo(Personaje):
         
     def datos(self):
         
-        t.sleep(2)
+        t.sleep(1)
         
         print(
             f"""

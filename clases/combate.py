@@ -1,6 +1,6 @@
 import time
 import random
-import personajes as p
+from . import personajes as p
 
 enemigos_directorio = {
     1 : {
@@ -8,7 +8,7 @@ enemigos_directorio = {
         1 : p.Enemigo(
                 nombre= "Troll",
                 salud=60,
-                ataque=6,
+                ataque=10,
                 nivel=1,
                 imagen="🧌",
                 descripcion="Es un Troll y ya"
@@ -20,6 +20,14 @@ enemigos_directorio = {
                 nivel=1,
                 imagen="🩻",
                 descripcion="Es una calabera esqueletica y ya"
+        ),
+        3 : p.Enemigo(
+                nombre= "Demonio",
+                salud=75,
+                ataque=20,
+                nivel=1,
+                imagen="👹",
+                descripcion="Demonio herrante por el mundo"
         )
         },
     "sub-jefes" : ...,
@@ -37,7 +45,7 @@ enemigos_directorio = {
     }
 }
 
-diccionario = {}
+enemigos_turno = {}
 
 def crear_combate (nivel:int,heroes:dict,tipo:str):
     
@@ -46,11 +54,13 @@ def crear_combate (nivel:int,heroes:dict,tipo:str):
     for i in range(n_enemigos):
         i = i + 1
         r = random.randint(1,len(enemigos_directorio[nivel][tipo]))
-        diccionario[i] = enemigos_directorio[nivel][tipo][r]
+        enemigos_turno[str(i)] = enemigos_directorio[nivel][tipo][r]
+        
+    enemigos_datos()
+    
+    for heroe in heroes:
+        heroe.menu_batalla()
     
 def enemigos_datos():
-    for i in diccionario:
-        diccionario[i].datos()
-        
-crear_combate(1,None,"basicos")
-enemigos_datos()
+    for i in enemigos_turno:
+        enemigos_turno[i].datos()

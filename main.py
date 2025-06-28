@@ -10,9 +10,15 @@ def dialogo(texto):
         time.sleep(1.5)
         print(frace)
 
+heroes = []
+
 if __name__ == "__main__":
 
     import pyfiglet as pft
+    
+    from clases import personajes as p
+    
+    import clases.combate as combate
 
     bienvenida = pft.figlet_format("Bienvenide a la Aventura en la Mazmorra",font="3-d")
     
@@ -73,8 +79,6 @@ if __name__ == "__main__":
         
     dialogo(introduccion)
     
-    from clases import personajes as p
-    
     time.sleep(2)
     
     print(
@@ -108,4 +112,8 @@ if __name__ == "__main__":
         """
         )
     
-    jugador_principal = p.PersonajeJugable(jugador_name,100,jugador_rol,10,10,50,"descripcion",True)
+    heroe_principal = p.PersonajeJugable(jugador_name,100,jugador_rol,10,10,50,"una leyenda que aparecio en este lugar.",True)
+    
+    heroes.append(heroe_principal)
+    
+    combate.crear_combate(nivel=1,heroes=heroes,tipo="basicos")
