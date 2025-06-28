@@ -289,11 +289,11 @@ class PersonajeJugable(Personaje):
             match respuesta:
                 
                 case "1" :
-                    ataque_1(troll,troll_2)
+                    ataque_1()
                 case "2" :
-                    ataque_2(troll,troll_2)
+                    ataque_2()
                 case "3" :
-                    ataque_3(troll,troll_2)
+                    ataque_3()
                 case "4" :
                     self.menu_batalla()
                 
@@ -318,11 +318,11 @@ class PersonajeJugable(Personaje):
             match respuesta:
                 
                 case "1" :
-                    habilidad_1(caballero_2)
+                    habilidad_1()
                 case "2" :
-                    habilidad_2(caballero_2)
+                    habilidad_2()
                 case "3" :
-                    habilidad_3(caballero_2)
+                    habilidad_3()
                 case "4" :
                     self.menu_batalla()
         
@@ -368,14 +368,17 @@ class PersonajeJugable(Personaje):
   
 class Enemigo(Personaje):
     
-    def __init__(self, nombre:str,salud:int,ataque:int,nivel:int,habilidades:dict,descripcion:str):
+    def __init__(self, nombre:str,salud:int,ataque:int,nivel:int,imagen:str,descripcion:str):
         super().__init__(nombre, descripcion)
         self.salud = salud
         self.ataque = ataque
         self.nivel = nivel
-        self.habilidades = habilidades
+        self.imagen = imagen
         
     def datos(self):
+        
+        t.sleep(2)
+        
         print(
             f"""
             {self.nombre}
@@ -383,62 +386,6 @@ class Enemigo(Personaje):
             
             [{self.salud}][{int(self.salud // 10) * "🖤" }]
             
-            [👹][{self.nivel}]
+            [{self.imagen}][{self.nivel}]
             
             """)
-
-troll = Enemigo(
-    nombre= "Troll",
-    salud=60,
-    ataque=6,
-    nivel=1,
-    habilidades=None,
-    descripcion="Es un Troll y ya"
-)
-
-troll_2 = Enemigo(
-    nombre= "Troll",
-    salud=60,
-    ataque=6,
-    nivel=1,
-    habilidades=None,
-    descripcion="Es un Troll y ya"
-)
-
-troll.datos()
-
-troll_2.datos()
-
-caballero = PersonajeJugable(
-                             nombre="Felipe",
-                             salud= 100,
-                             rol= "caballero",
-                             ataque= 10,
-                             especial= 15,
-                             magia= 50,
-                             descripcion="Caballero y ya",
-                             vivo= True
-                             )
-
-caballero_2 = PersonajeJugable(
-                             nombre="Stiven",
-                             salud= 100,
-                             rol= "caballero",
-                             ataque= 10,
-                             especial= 15,
-                             magia= 50,
-                             descripcion="otro caballero",
-                             vivo= True
-                             )
-
-caballero.menu_batalla()
-
-caballero_2.menu_batalla()
-
-troll.datos()
-
-troll_2.datos()
-
-print(caballero.nombre," ",caballero.salud)
-
-print(caballero_2.nombre," ",caballero_2.salud)
