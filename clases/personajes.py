@@ -24,12 +24,12 @@ class PersonajeJugable(Personaje):
                 daño = self.ataque * valor_ataque
                 self.magia -= costo_magia
                 for objetivo in objetivos:
-                    objetivo.salud -= (daño)
+                    objetivo.salud -= daño
                     objetivo.salud = int(objetivo.salud)
             else:
                 if len(objetivos) == 1 :
                     daño = self.ataque * valor_ataque
-                    objetivos[0].salud -= (daño)
+                    objetivos[0].salud -= daño
                     objetivos[0].salud = int(objetivos[0].salud)
                 else:
                     print(
@@ -39,8 +39,11 @@ class PersonajeJugable(Personaje):
                     for objetivo in objetivos:
                         i = 1
                         print(f"[{i}][{objetivo.nombre}]")
-                        i += 1
-                    respuesta = input(">>> ")
+                        i = i + 1
+                    respuesta = int(input(">>> "))
+                    daño = self.ataque * valor_ataque
+                    objetivos[(respuesta-1)].salud -= daño
+                    objetivos[(respuesta-1)].salud = int(objetivos[(respuesta-1)].salud)
     
     def definir_habilidades(self):
         
