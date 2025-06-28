@@ -11,7 +11,7 @@ enemigos_directorio = {
                 ataque=10,
                 nivel=1,
                 imagen="🧌",
-                descripcion="Es un Troll y ya"
+                descripcion="Es un Troll y ya",
         ),
         2 : p.Enemigo(
                 nombre= "Calabera",
@@ -19,7 +19,7 @@ enemigos_directorio = {
                 ataque=12,
                 nivel=1,
                 imagen="🩻",
-                descripcion="Es una calabera esqueletica y ya"
+                descripcion="Es una calabera esqueletica y ya",
         ),
         3 : p.Enemigo(
                 nombre= "Demonio",
@@ -27,7 +27,7 @@ enemigos_directorio = {
                 ataque=20,
                 nivel=1,
                 imagen="👹",
-                descripcion="Demonio herrante por el mundo"
+                descripcion="Demonio herrante por el mundo",
         )
         },
     "sub-jefes" : ...,
@@ -56,10 +56,46 @@ def crear_combate (nivel:int,heroes:dict,tipo:str):
         r = random.randint(1,len(enemigos_directorio[nivel][tipo]))
         enemigos_turno[str(i)] = enemigos_directorio[nivel][tipo][r]
         
-    enemigos_datos()
     
-    for heroe in heroes:
-        heroe.menu_batalla()
+    def aliados_vivos():
+        
+        lista = []
+        
+        for heroe in heroes:
+            
+            lista.append(heroe.vivo)
+            
+        if True in lista:
+            
+            return True
+        
+        else:
+            
+            return False
+    
+    def enemigos_vivos():
+        
+        lista = []
+        
+        for enemigo in enemigos_turno:
+            
+            lista.append(enemigos_turno[enemigo].vivo)
+            
+        if True in lista:
+            
+            return True
+        
+        else:
+            
+            return False
+        
+    while ((aliados_vivos() and enemigos_vivos())):
+        
+        enemigos_datos()
+        
+        for heroe in heroes:
+            
+            heroe.menu_batalla()
     
 def enemigos_datos():
     for i in enemigos_turno:

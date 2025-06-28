@@ -112,7 +112,7 @@ if __name__ == "__main__":
         """
         )
     
-    heroe_principal = p.PersonajeJugable(jugador_name,100,jugador_rol,10,10,50,"una leyenda que aparecio en este lugar.",True)
+    heroe_principal = p.PersonajeJugable(jugador_name,100,jugador_rol,10,10,50,"una leyenda que aparecio en este lugar.")
     
     heroes.append(heroe_principal)
     

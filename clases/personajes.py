@@ -6,11 +6,12 @@ class Personaje :
     def __init__(self,nombre:str,descripcion:str):
         self.nombre = nombre
         self.descripcion = descripcion
+        self.vivo = True
     
 
 class PersonajeJugable(Personaje):
     
-    def __init__(self,nombre:str,salud:int,rol:str,ataque:int,especial:int,magia:int,descripcion:str,vivo:bool):
+    def __init__(self,nombre:str,salud:int,rol:str,ataque:int,especial:int,magia:int,descripcion:str):
         super().__init__(nombre,descripcion)
         self.salud = int(salud)
         self.rol = rol
@@ -19,9 +20,12 @@ class PersonajeJugable(Personaje):
         self.magia = magia
         self.experiencia = 0
         self.nivel = 1
-        self.vivo = vivo
         self.habilidades = {}
         self.definir_habilidades()
+        
+        if self.salud <= 0:
+            self.vivo = False
+            print(f"☠️ El personaje {self.nombre} esta muerto ☠️")
 
     def atacar(self,valor_ataque:int,costo_magia:int,grupal:bool,**objetivos:object):
         if self.magia >= costo_magia:
@@ -329,45 +333,47 @@ class PersonajeJugable(Personaje):
                 case "4" :
                     self.menu_batalla()
         
-        print(
-            f"""
-            
-            ____________________________________________________________
-            
-            {self.nombre}
-            
-            [{self.salud}][{(self.salud // 10) * "💖" }]
-            
-            [{self.magia}][{(self.magia // 10) * "🧿" }]
-            
-            ____________________________________________________________
-            
-            Opciones
-            
-            [⚔️][1][atacar]
-            
-            [💫][2][habilidad]
-            
-            """)
+        if self.vivo:
         
-        pregunta = input(">>> ")
-        
-        if pregunta == "1":
-            t.sleep(2)
-            opciones_ataque()
-        elif pregunta == "2":
-            t.sleep(2)
-            opciones_habilidad()
-        else:
-            #volver a preguntar
+            print(
+                f"""
+                
+                ____________________________________________________________
+                
+                {self.nombre}
+                
+                [{self.salud}][{(self.salud // 10) * "💖" }]
+                
+                [{self.magia}][{(self.magia // 10) * "🧿" }]
+                
+                ____________________________________________________________
+                
+                Opciones
+                
+                [⚔️][1][atacar]
+                
+                [💫][2][habilidad]
+                
+                """)
             
-            t.sleep(2)
+            pregunta = input(">>> ")
             
-            print("\n ⚠️ Valor no permitido, vuelve a intentar")
-            
-            t.sleep(2)
-            
-            self.menu_batalla()
+            if pregunta == "1":
+                t.sleep(2)
+                opciones_ataque()
+            elif pregunta == "2":
+                t.sleep(2)
+                opciones_habilidad()
+            else:
+                #volver a preguntar
+                
+                t.sleep(2)
+                
+                print("\n ⚠️ Valor no permitido, vuelve a intentar")
+                
+                t.sleep(2)
+                
+                self.menu_batalla()
   
 class Enemigo(Personaje):
     
@@ -378,17 +384,21 @@ class Enemigo(Personaje):
         self.nivel = nivel
         self.imagen = imagen
         
+        if self.salud <= 0:
+            self.vivo = False
+            print(f"☠️ El enemigo {self.nombre} esta muerto ☠️")
+        
     def datos(self):
-        
-        t.sleep(1)
-        
-        print(
-            f"""
-            {self.nombre}
-            ____________________________________________________________
+        if self.vivo:
+            t.sleep(1)
             
-            [{self.salud}][{int(self.salud // 10) * "🖤" }]
-            
-            [{self.imagen}][{self.nivel}]
-            
-            """)
+            print(
+                f"""
+                {self.nombre}
+                ____________________________________________________________
+                
+                [{self.salud}][{int(self.salud // 10) * "🖤" }]
+                
+                [{self.imagen}][{self.nivel}]
+                
+                """)
