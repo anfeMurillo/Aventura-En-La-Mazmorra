@@ -4,10 +4,10 @@ def dialogo(texto):
     """
     
     """
-    lista = texto.split("/n")
+    lista = texto.split("\n")
     
     for frace in lista:
-        time.sleep(1.5)
+        time.sleep(0.5)
         print(frace)
 
 heroes = []
@@ -56,26 +56,28 @@ if __name__ == "__main__":
     inicio()
     
     introduccion = """
+    🕯️ La Mazmorra de Ladagua 🕯️
+
+    Se dice que en las profundidades del mundo existe una mazmorra viviente que nadie ha logrado conquistar.
     
-        🕯️ La Mazmorra de Ladagua 🕯️
-        /n
-        Dicen que en lo más profundo del mundo, donde la piedra respira y la oscuridad piensa, existe una mazmorra 
-        que nadie ha logrado conquistar. Sus muros murmuran nombres olvidades, y cada escalón hacia abajo es un 
-        paso hacia lo desconocido.
-        /n
-        Esta no es una prisión cualquiera. Es un ser viviente. Un laberinto que cambia, que se alimenta del miedo 
-        de quienes se atreven a entrar. Se dice que fue construida por une antigüe hechicere que quiso encerrar 
-        el dolor del mundo… pero terminó encerrándose a sí misme.
-        /n
-        Besties deformes, acertijos imposibles, trampas silenciosas y pasillos sin fin esperan a quien se atreva 
-        a cruzar sus puertas. Pocas personas han entrado. Ningune ha salido.
-        /n
-        Y sin embargo, aquí estás. Frente a la entrada, con el corazón latiendo como un tambor de guerra. 
-        No sabés quién sos realmente, ni por qué estás acá… pero algo te llama desde el fondo.
-        /n
-        ¿Entrás para buscar gloria? ¿Redención? ¿O simplemente porque ya no hay otro lugar adonde ir?
-        /n
-        Ladagua te ha elegido. La mazmorra respira. Y tu historia… acaba de comenzar."""
+    Sus muros susurran nombres olvidades, y cada paso es un descenso hacia lo desconocido.
+
+    Construida por une antigüe hechicere que intentó encerrar el dolor del mundo, terminó atrapándose a sí misme.
+    
+    Ahora, besties, trampas y acertijos habitan en sus pasillos cambiantes.
+
+    Poc@s han entrado. Ningune ha salido.
+
+    Y sin embargo, ahí estás. No sabés quién sos ni por qué viniste, pero sentís el llamado.
+
+    ¿Buscás gloria? ¿Redención? ¿O simplemente un lugar donde pertenecer?
+    
+    Ladagua te ha elegido. 
+    
+    La mazmorra respira.
+    
+    Tu historia comienza ahora.
+    """
         
     dialogo(introduccion)
     

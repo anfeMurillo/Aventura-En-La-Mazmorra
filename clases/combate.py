@@ -5,29 +5,29 @@ from . import personajes as p
 enemigos_directorio = {
     1 : {
     "basicos" : {
-        1 : p.Enemigo(
-                nombre= "Troll",
-                salud=60,
-                ataque=10,
-                nivel=1,
-                imagen="🧌",
-                descripcion="Es un Troll y ya",
+        1 : (
+                "Troll",
+                60,
+                10,
+                1,
+                "🧌",
+                "Es un Troll y ya",
         ),
-        2 : p.Enemigo(
-                nombre= "Calabera",
-                salud=80,
-                ataque=12,
-                nivel=1,
-                imagen="🩻",
-                descripcion="Es una calabera esqueletica y ya",
+        2 : (
+                "Calabera",
+                80,
+                12,
+                1,
+                "🩻",
+                "Es una calabera esqueletica y ya",
         ),
-        3 : p.Enemigo(
-                nombre= "Demonio",
-                salud=75,
-                ataque=20,
-                nivel=1,
-                imagen="👹",
-                descripcion="Demonio herrante por el mundo",
+        3 : (
+                "Demonio",
+                75,
+                20,
+                1,
+                "👹",
+                "Demonio herrante por el mundo",
         )
         },
     "sub-jefes" : ...,
@@ -45,6 +45,7 @@ enemigos_directorio = {
     }
 }
 
+
 enemigos_turno = {}
 
 def crear_combate (nivel:int,heroes:dict,tipo:str):
@@ -54,7 +55,7 @@ def crear_combate (nivel:int,heroes:dict,tipo:str):
     for i in range(n_enemigos):
         i = i + 1
         r = random.randint(1,len(enemigos_directorio[nivel][tipo]))
-        enemigos_turno[str(i)] = enemigos_directorio[nivel][tipo][r]
+        enemigos_turno[str(i)] = p.Enemigo(*enemigos_directorio[nivel][tipo][r])
         
     
     def aliados_vivos():

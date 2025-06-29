@@ -38,6 +38,7 @@ class PersonajeJugable(Personaje):
             else:
                 if len(objetivos) == 1 :
                     daño = self.ataque * valor_ataque
+                    self.magia -= costo_magia
                     objetivos[str(1)].salud -= daño
                     objetivos[str(1)].salud = int(objetivos[str(1)].salud)
                 else:
@@ -47,11 +48,15 @@ class PersonajeJugable(Personaje):
                         """)
                     i = 1
                     for objetivo in objetivos:
-                        print(f"[{(i)}][{objetivos[objetivo].nombre}]")
-                        i += 1
+                        if objetivos[objetivo].vivo == True:
+                            print(f"[{(i)}][{objetivos[objetivo].nombre}]")
+                            i += 1
+                        else:
+                            i += 1
                         
                     respuesta = int(input(">>> "))
                     daño = self.ataque * valor_ataque
+                    self.magia -= costo_magia
                     objetivos[str(respuesta)].salud -= daño
                     objetivos[str(respuesta)].salud = int(objetivos[str(respuesta)].salud)
         else:
@@ -382,23 +387,25 @@ class Enemigo(Personaje):
         self.salud = salud
         self.ataque = ataque
         self.nivel = nivel
-        self.imagen = imagen
-        
-        if self.salud <= 0:
-            self.vivo = False
-            print(f"☠️ El enemigo {self.nombre} esta muerto ☠️")
-        
+        self.imagen = imagen        
+
     def datos(self):
-        if self.vivo:
-            t.sleep(1)
-            
-            print(
-                f"""
-                {self.nombre}
-                ____________________________________________________________
+        
+        if self.vivo == True:
+            if self.salud <= 0:
+                self.vivo = False
+                print(f"☠️ El enemigo {self.nombre} esta muerto ☠️")
+        
+            if self.vivo:
+                t.sleep(1)
                 
-                [{self.salud}][{int(self.salud // 10) * "🖤" }]
-                
-                [{self.imagen}][{self.nivel}]
-                
-                """)
+                print(
+                    f"""
+                    {self.nombre}
+                    ____________________________________________________________
+                    
+                    [{self.salud}][{int(self.salud // 10) * "🖤" }]
+                    
+                    [{self.imagen}][{self.nivel}]
+                    
+                    """)
